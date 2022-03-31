@@ -1,56 +1,50 @@
 <template>
-  <div class="max-w-screen-md mx-auto px-4 py-10">
+  <div class="w-1/2 h-full mx-auto px-4 py-10">
     <!-- Error Handling -->
     <div v-if="errorMsg" class="mb-10 p-4 rounded bg-blue-200">
       <p class="text-red-500">{{ errorMsg }}</p>
     </div>
     <!-- Form -->
-    <form
-      @submit.prevent="signUp"
-      class="p-9 flex flex-col bg-white rounded-md shadow-lg"
-    >
+    <form @submit.prevent="signUp" class="p-9 flex flex-col bg-white rounded-md shadow-lg">
       <h1 class="text-3xl text-blue-500 mb-4 text-center">Register</h1>
       <div class="flex flex-col mb-2">
-        <label class="mb-1 text-sm text-blue-600" for="email">Email</label>
+        <label class="mb-2 text-md text-blue-600" for="email">Email</label>
         <input
           type="text"
           required
-          class="p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
+          class="mb-6 p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
           v-model="email"
           id="email"
+          placeholder="Email"
         />
       </div>
       <div class="flex flex-col mb-2">
-        <label class="mb-1 text-sm text-blue-600" for="password"
-          >Password</label
-        >
+        <label class="mb-2 text-md text-blue-600" for="password">Password</label>
         <input
           type="password"
           required
-          class="p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
+          class="mb-6 p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
           v-model="password"
           id="password"
+          placeholder="Password"
         />
       </div>
       <div class="flex flex-col mb-2">
-        <label class="mb-1 text-sm text-blue-600" for="confirmPassword"
-          >Confirm Password</label
-        >
+        <label class="mb-2 text-md text-blue-600" for="confirmPassword">Confirm Password</label>
         <input
           type="password"
           required
-          class="p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
+          class="mb-6 p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
           v-model="confirmPassword"
           id="confirmPassword"
+          placeholder="Confirm Password"
         />
       </div>
 
       <button
         type="submit"
         class="mt-6 py-2 px-6 rounded-sm border-blue-600 border text-blue-600 hover:bg-blue-600 hover:text-white"
-      >
-        Register
-      </button>
+      >Register</button>
 
       <p class="text-center pt-16">
         Have an account?

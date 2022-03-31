@@ -1,52 +1,68 @@
 <template>
-  <div class="bg-blue-600 min-h-min">
-    <div class="max-w-screen-md mx-auto px-4 py-10">
-      <div class="flex flex-col mb-2">
-        <form @submit.prevent="addTask" class="p-9 flex flex-col bg-white rounded-md shadow-lg">
-          <button
-            type="submit"
-            @click="signOut()"
-            class="mb-6 p-2 rounded-sm border-blue-600 border text-blue-600 hover:bg-blue-600 hover:text-white"
-          >Log Out</button>
-          <!-- <label class="mb-1 text-sm text-blue-600" for="email">Add Task</label> -->
-          <h1 class="text-3xl text-blue-500 mb-4 text-center">Add Task To Do</h1>
-          <input
-            type="text"
-            class="p-2 text-blue-600 focus:outline-none border border-blue-600 rounded-md"
-            v-model="add"
-            id="add"
-          />
-          <button
-            type="submit"
-            class="mt-6 py-2 px-6 rounded-sm border-blue-600 border text-blue-600 hover:bg-blue-600 hover:text-white"
-          >Add</button>
-        </form>
-      </div>
+  <div class="image bg-right-bottom">
+    <Nav />
+    <h1 class="text-5xl text-white font-medium mb-4 text-center">What are today's goals?</h1>
+    <div class="text-center">
+      <NewTask @childAddTodo="addNewTask" />
+      <TaskItem
+        v-for="(task, index) in tasks"
+        :item="task"
+        @toggleCompleteChild="toggleComplete"
+        @childRemove="deleteTask"
+        @childEdit="joaquin"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { supabase } from "../supabase";
-import { useRouter } from "vue-router";
+import NewTask from "../components/NewTask.vue";
+import TaskItem from "../components/TaskItem.vue";
 import { useUserStore } from "../store/user";
-import { storeToRefs } from "pinia";
+import { useTaskStore } from "../store/task";
+import Nav from "../components/Nav.vue";
+import AppHeader from "../components/AppHeader.vue";
 
-const newTask = ref("");
+// variable to store array of tasks from supabase in the front as an empty array
+let tasks = ref([]);
 
-// Router to push user once SignedUp to Log In
-const redirect = useRouter();
+// function to fetch tasks from supabase using pinia
+async function getTasks() {
+  const res = await useTaskStore().fetchTasks();
+  console.log(res);
+  tasks.value = res;
+}
 
-// Component Redirections
-const router = useRouter();
-const buttonText = "Log Out";
+getTasks();
 
-async function signOut() {
-  await useUserStore().signOut();
-  router.push("/auth");
+// Function to post new Task into supabase using pinia
+async function addNewTask(newTask) {
+  console.log(newTask);
+  await useTaskStore().createTask(newTask);
+  getTasks();
+}
+
+// async function that will toggle the state between (TRUE or FALSE) on supabase that also uses an emmitted function coming from taskItem.vue
+async function toggleComplete(item) {
+  const toggleCompleted = !item.is_complete;
+  const toggleId = item.id;
+  const res = await useTaskStore().toggleDone(toggleCompleted, toggleId);
+  getTasks();
+  console.log(res);
+}
+
+async function deleteTask(item) {
+  await useTaskStore().deleteTask(item.id);
+  getTasks();
+}
+
+async function joaquin(item) {
+  console.log(item);
+  await useTaskStore().juan(item.name, item.id);
+  getTasks();
 }
 </script>
 
-<style>
+<style >
 </style>

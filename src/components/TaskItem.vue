@@ -1,105 +1,53 @@
 <template>
-  <!-- Item wrapper -->
-  <div class="flex gap-5 items-center my-10 ml-10">
-    <p :class="{ taskDone: item.completed }">{{ item.title }}</p>
+  <div class="flex justify-center align-items space-between">
+    <input
+      class="mt-6 mx-4 py-2 px-6 rounded-sm bg-white-200 text-black border border-gray-200 rounded"
+      type="text"
+      v-model="item.title"
+    />
     <button
-      v-if="!item.completed"
-      class="btn-template bg-green-400 hover:bg-green-500"
-      @click="toggleTodo()"
-    >
-      Done
-    </button>
+      class="mt-6 mx-4 py-2 px-6 rounded-sm text-white bg-blue-500"
+      @click="toggleComplete()"
+    >{{item.is_complete ? 'Check' : 'Checked'}}</button>
     <button
-      v-if="item.completed"
-      class="btn-template bg-indigo-400 hover:bg-indigo-500"
-      @click="toggleTodo()"
-    >
-      Undone
-    </button>
+      class="mt-6 mx-4 py-2 px-6 rounded-sm border-orange-600 border text-white bg-orange-600"
+      @click="pepe()"
+    >Edit</button>
     <button
-      class="btn-template bg-yellow-400 hover:bg-yellow-500"
-      @click="showEditDialog()"
-    >
-      Edit
-    </button>
-
-    <button class="btn-template bg-red-500 hover:bg-red-600" @click="remove()">
-      Remove
-    </button>
+      class="mt-6 mx-4 py-2 px-6 rounded-sm border-red-600 border bg-red-600 text-white"
+      @click="deleteTask()"
+    >Delete</button>
   </div>
-
-  <!-- Edit dialog -->
-  <form action="">
-    <div v-if="editDialog" class="flex gap-5 items-center my-10 ml-10">
-      <input
-        type="text"
-        class="border border-gray-400 rounded"
-        v-model="editTodo"
-      />
-      <button
-        class="btn-template bg-gray-400 hover:bg-green-500"
-        @click.prevent="edit()"
-      >
-        OK
-      </button>
-      <p v-if="empty" class="text-red-600 font-bold">
-        {{ errorInput }}
-      </p>
-    </div>
-  </form>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
-import { useTaskStore } from "../store/task";
-// Error Handling variables
-let empty = ref(false); // for editing a task
-let errorInput = ref(""); // error message variable
-// Edit Dialog variables
-let editTodo = ref(""); // value from edit dialog
-let editDialog = ref(false); // initially hidden
-let currentIndex = ref(""); // used to show only 1 dialog
-let taskDone = true; // toggleDone boolean
-const emit = defineEmits(["childToggle", "childRemove", "childEdit"]);
+import { ref, defineProps } from "vue";
+
+// is task done variable boolean ?
+let taskDone = true;
+const name = ref("");
+
+// variable that is used to EMIT functions and methods from child comp to parent comp
+const emit = defineEmits(["childRemove", "childEdit", "toggleCompleteChild"]);
+
+// variable to export the content of the task to its parent component
 const props = defineProps(["item"]);
-// Error Handling
-function errHandl() {
-  errorInput.value = "Field cannot be empty";
-  empty.value = true;
+
+name.value = props.item.title;
+
+//function toggleComplete that emits logic to parent component, will be used to turn boolean values from false & true
+function toggleComplete() {
+  emit("toggleCompleteChild", props.item);
 }
-// Show Edit Dialog
-function showEditDialog() {
-  //   emit("childShowEditDialog", props.item);
-  editDialog.value = true; // shows edit dialog
-}
-// Toggle Done and Undone
-function toggleTodo() {
-  emit("childToggle", props.item); // sends info to parent component
-}
-// Edit task
-function edit() {
-  if (editTodo.value === "") errHandl();
-  // shows error message
-  else {
-    empty.value = false; // hides error message
-    editDialog.value = false; // hides edit dialog
-    const editValues = {
-      oldValue: props.item,
-      newValue: editTodo.value,
-    };
-    emit("childEdit", editValues);
-    // pendings[index] = editTodo.value; // modifies text
-    editTodo.value = ""; // clears input field
-  }
-}
-// Remove task
-function remove() {
+
+function deleteTask() {
   emit("childRemove", props.item);
+}
+
+function pepe() {
+  emit("childEdit", { name: props.item.title, id: props.item.id });
 }
 </script>
 
 <style>
-.taskDone {
-  text-decoration-line: line-through;
-}
 </style>

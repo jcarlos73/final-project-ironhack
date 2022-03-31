@@ -8,6 +8,7 @@ export const useUserStore = defineStore("user", {
     async fetchUser() {
       const user = await supabase.auth.user();
       this.user = user;
+      return this.user;
     },
     async signUp(email, password) {
       const { user, error } = await supabase.auth.signUp({
