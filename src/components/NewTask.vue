@@ -10,7 +10,7 @@
         placeholder="Add Task"
       />
       <button
-        class="mt-8 mb-4 mx-10 py-3 px-6 hover:bg-black text-white hover:text-white rounded-lg"
+        class="mt-9 mb-4 mx-10 py-2 px-6 rounded-sm hover:bg-black-600 text-white hover:text-white rounded-lg shadow-lg"
         @click.prevent="addTodo"
       >Create</button>
       <!-- <button class="btn-template bg-blue-500 hover:bg-blue-600" @click.prevent="addTodo">Add</button> -->

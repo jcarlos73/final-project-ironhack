@@ -1,5 +1,5 @@
 <template>
-  <div class="image bg-right-bottom">
+  <div class="image bg-right-bottom flex w-full h-max h-screen pb -20">
     <Nav />
     <h1 class="text-5xl text-white font-medium mb-4 text-center">What are today's goals?</h1>
     <div class="text-center">

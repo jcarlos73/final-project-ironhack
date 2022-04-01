@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-indigo-400 min-h-min">
+  <div>
     <router-view></router-view>
   </div>
 </template>

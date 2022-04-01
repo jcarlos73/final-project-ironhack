@@ -6,7 +6,13 @@
       v-model="item.title"
     />
     <button
-      class="mt-6 mx-4 py-2 px-6 rounded-sm text-white bg-blue-500"
+      v-if="!item.is_complete"
+      class="mt-6 mx-4 py-2 px-6 rounded-sm text-white bg-green-500"
+      @click="toggleComplete()"
+    >{{item.is_complete ? 'Check' : 'Checked'}}</button>
+    <button
+      v-else
+      class="mt-6 mx-4 py-2 px-6 rounded-sm text-white bg-red-500"
       @click="toggleComplete()"
     >{{item.is_complete ? 'Check' : 'Checked'}}</button>
     <button
